@@ -20,10 +20,10 @@ namespace ArsipNilai
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection())
+            using (SqlConnection conn = new SqlConnection("Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true"))
             {
                 //open connection
-                conn.ConnectionString = "Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
+                //conn.ConnectionString = "Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
                 conn.Open();
 
                 //Data Reader

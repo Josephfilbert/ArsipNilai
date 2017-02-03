@@ -42,6 +42,7 @@
             this.dgvAllData.Location = new System.Drawing.Point(0, 44);
             this.dgvAllData.Name = "dgvAllData";
             this.dgvAllData.ReadOnly = true;
+            this.dgvAllData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAllData.Size = new System.Drawing.Size(710, 320);
             this.dgvAllData.TabIndex = 0;
             // 
