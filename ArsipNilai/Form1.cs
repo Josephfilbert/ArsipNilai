@@ -16,5 +16,10 @@ namespace ArsipNilai
         {
             InitializeComponent();
         }
+
+        private void btnShowAllData_Click(object sender, EventArgs e)
+        {
+            new frmAllData().ShowDialog();
+        }
     }
 }
