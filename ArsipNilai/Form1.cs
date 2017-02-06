@@ -84,5 +84,14 @@ namespace ArsipNilai
                 btnTampilMahasiswa.PerformClick();
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(new dlgEditData("SemesterData").ShowDialog() == DialogResult.OK)
+            {
+                //refresh the list
+                btnTampilDataSemester.PerformClick();
+            }
+        }
     }
 }

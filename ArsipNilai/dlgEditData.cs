@@ -13,13 +13,24 @@ namespace ArsipNilai
 {
     public partial class dlgEditData : Form
     {
-
+        /*
+         * SQL Error Number List:
+         * 2627: No duplicate key (violation of primary key constraint)
+         * 547: INSERT conflicted with CHECK constraint
+         * 
+         */
         
-        
+        /*
+         * Set ComboBox DropDownStyle
+         * Simple : Same as regular TextBox
+         * DropDown : allow typing
+         * DropDownList : prevent typing
+         *
+         */
 
         enum OperationMode
         {
-            insert, update
+            Insert, Update
         }
 
         String relationName;
@@ -40,6 +51,7 @@ namespace ArsipNilai
             key1 = k1;
             key2 = k2;
             key3 = k3;
+            this.Text = relName;
 
             try
             {
@@ -78,17 +90,19 @@ namespace ArsipNilai
 
                     //we already know the keys in each relation so we can directly specify it
 
+                    #region "UI Processing"
                     //check operation mode
-                    if(k1 == null)
+                    if (k1 == null)
                     {
                         //if key1 is null, then it is data insertion mode
-                        opMode = OperationMode.insert;
+                        opMode = OperationMode.Insert;
+                        this.Text = "Insert into " + this.Text;
 
                         //check relation name, it determines number of key fields to be active
                         if(relName == "Student")
                         {
                             //hide the key2 and key3 field
-                            lblKey2.Visible = lblKey3.Visible = cboKey2.Visible = cboKey3.Visible = false;
+                            lblKey2.Visible = lblKey3.Visible = cboKey2.Visible = cboKey2.Enabled = cboKey3.Visible = cboKey3.Enabled = false;
 
                             //also the Student relation has 3 non-primary key fields so hide the last 2 fields
                             lblField4.Visible = lblField5.Visible = txtField4.Visible = txtField5.Visible = false;
@@ -96,7 +110,7 @@ namespace ArsipNilai
                             //the first key is the new key, disable the dropdown button
                             cboKey1.DropDownStyle = ComboBoxStyle.Simple;
 
-                            //set the attribute levels
+                            //set the attribute labels
                             lblKey1.Text = "NIM :";
                             lblField1.Text = "Name :";
                             lblField2.Text = "Program :";
@@ -104,11 +118,62 @@ namespace ArsipNilai
                         }
 
                         //TODO: Implement for other relations!!!
+                        else if(relName == "SemesterData")
+                        {
+                            //only 2 keys required
+                            lblKey3.Visible = cboKey3.Visible = cboKey3.Enabled = false;
+
+                            //used to insert new semester
+                            cboKey2.DropDownStyle = ComboBoxStyle.Simple;
+
+                            //only 1 field required
+                            lblField2.Visible = lblField3.Visible = lblField4.Visible = lblField5.Visible = false;
+                            txtField2.Visible = txtField3.Visible = txtField4.Visible = txtField5.Visible = false;
+                            txtField2.Enabled = txtField3.Enabled = txtField4.Enabled = txtField5.Enabled = false;
+
+                            //the first key is foreign key so set the available data
+                            using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
+                            {
+
+                                using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        while(reader.Read())
+                                        {
+                                            cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return;
+                                    }
+                                }
+                            }
+
+                            //cboKey1.BindingContext = this.BindingContext;
+                            cboKey1.DropDownStyle = ComboBoxStyle.DropDownList;
+                            cboKey1.SelectedIndex = 0;
+
+                            //set the labels
+                            lblKey1.Text = "NIM :";
+                            lblKey2.Text = "Semester :";
+                            lblField1.Text = "Semester Year :";
+                        }
+
+                        else if (relName == "Courses")
+                        {
+                            //all fields used, change all combo box to Text Box mode
+                            cboKey1.DropDownStyle = cboKey2.DropDownStyle = cboKey3.DropDownStyle = ComboBoxStyle.Simple;
+                        }
                         
                     }
 
                     //TODO: Implement for other relations!!!!
 
+                    #endregion
                 }
             } catch(Exception ex)
             {
@@ -121,8 +186,9 @@ namespace ArsipNilai
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            #region "Validation"
             //check constraints
-            if(relationName == "Student")
+            if (relationName == "Student")
             {
                 //validate NIM
                 if(cboKey1.Text.Length != 10 || !CommonFunctions.IsNumeric(cboKey1.Text))
@@ -134,18 +200,45 @@ namespace ArsipNilai
                 //validate not null for the three fields
                 if(String.IsNullOrWhiteSpace(txtField1.Text) || String.IsNullOrWhiteSpace(txtField2.Text) || String.IsNullOrWhiteSpace(txtField3.Text))
                 {
-                    CommonFunctions.InvokeErrorMsg("The fields cannot be empty!", Application.ProductName);
+                    CommonFunctions.InvokeErrorMsg("The attributes cannot be empty!", Application.ProductName);
                     return;
                 }
 
                 //validate that the EnrollYear should be numeric
-                if (!CommonFunctions.IsNumeric(txtField3.Text)) return;
+                if (!CommonFunctions.IsNumeric(txtField3.Text))
+                {
+                    CommonFunctions.InvokeErrorMsg("Enroll Year should be numeric!", Application.ProductName);
+                    return;
+                }
 
 
             }
 
+
+            //TODO: Implement for other relations!!!
+            else if (relationName == "SemesterData")
+            {
+                //check semester number
+                int semester;
+                
+                if(!int.TryParse(cboKey2.Text, out semester) || semester < 1)
+                {
+                    CommonFunctions.InvokeErrorMsg("The semester should be numeric and greater than zero", Application.ProductName);
+                    return;
+                }
+
+                if(!CommonFunctions.IsNumeric(txtField1.Text))
+                {
+                    CommonFunctions.InvokeErrorMsg("The semester year should be numeric!", Application.ProductName);
+                    return;
+                }
+
+            }
+
+            #endregion
+
             //insert or update
-            if(opMode == OperationMode.insert)
+            if (opMode == OperationMode.Insert)
             {
 
                try {
@@ -153,34 +246,111 @@ namespace ArsipNilai
                     {
                         conn.Open();
 
-                        SqlCommand command = new SqlCommand();
-                        command.Connection = conn;
-                      
-                        
-                        if(relationName == "Student")
+                        using (SqlCommand command = new SqlCommand())
                         {
-                            command.CommandText =  "INSERT INTO Student (NIM, Name, Program, EnrollYear) VALUES (@1, @2, @3, @4)";
+                            command.Connection = conn;
 
-                            command.Parameters.Add(new SqlParameter("1", cboKey1.Text)); //NIM
-                            command.Parameters.Add(new SqlParameter("2", txtField1.Text)); //Name
-                            command.Parameters.Add(new SqlParameter("3", txtField2.Text)); //Program
-                            command.Parameters.Add(new SqlParameter("4", short.Parse(txtField3.Text))); //EnrollYear
 
-                            
+                            if (relationName == "Student")
+                            {
+                                command.CommandText = "INSERT INTO Student (NIM, Name, Program, EnrollYear) VALUES (@1, @2, @3, @4)";
+
+                                command.Parameters.Add(new SqlParameter("1", cboKey1.Text)); //NIM
+                                command.Parameters.Add(new SqlParameter("2", txtField1.Text)); //Name
+                                command.Parameters.Add(new SqlParameter("3", txtField2.Text)); //Program
+                                command.Parameters.Add(new SqlParameter("4", short.Parse(txtField3.Text))); //EnrollYear
+
+
+                                try
+                                {
+                                    //Execute the update command
+                                    if (command.ExecuteNonQuery() > 0)
+                                    {
+                                        MessageBox.Show("Insert successful!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        this.DialogResult = DialogResult.OK;
+                                        this.Close();
+                                    }
+                                }
+
+                                catch (SqlException sqlEx)
+                                {
+
+                                    if (sqlEx.Number == 2627)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The NIM already exists!", Application.ProductName);
+                                    }
+
+                                    else if (sqlEx.Number == 547)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("Enroll year should be lesser than or equal to " + DateTime.Now.Year, Application.ProductName);
+                                    }
+
+                                    else
+                                    {
+                                        CommonFunctions.InvokeErrorMsg(String.Format(
+                                        "SQL Error Code : {0}\n" +
+                                        "SQL Error Number : {1}\n" +
+                                        "SQL Message :\n{2}",
+                                            sqlEx.ErrorCode, sqlEx.Number, sqlEx.Message
+                                        )
+                                        , Application.ProductName);
+                                    }
+
+                                }
+
+
+
+                            }
+
+                            //TODO: Implement for other relations!
+                            else if (relationName == "SemesterData")
+                            {
+                                command.CommandText = "INSERT INTO SemesterData (NIM, Semester, SemesterYear) VALUES (@1, @2, @3)";
+
+                                command.Parameters.Add(new SqlParameter("1", cboKey1.Text.Substring(0, 10))); //NIM
+                                command.Parameters.Add(new SqlParameter("2", short.Parse(cboKey2.Text))); //Semester
+                                command.Parameters.Add(new SqlParameter("3", short.Parse(txtField1.Text))); //Semester Year
+
+                                try
+                                {
+                                    if (command.ExecuteNonQuery() > 0)
+                                    {
+                                        MessageBox.Show("Insert successful!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        this.DialogResult = DialogResult.OK;
+                                        this.Close();
+                                    }
+                                }
+                                catch (SqlException sqlEx)
+                                {
+                                    if (sqlEx.Number == 2627)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The semester already exists!", Application.ProductName);
+                                    }
+
+                                    else if (sqlEx.Number == 547)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("Semester Year must be greater or equal to Enroll Year and less than or equal to current year", Application.ProductName);
+                                    }
+                                    else
+                                    {
+                                        CommonFunctions.InvokeErrorMsg(String.Format(
+                                            "SQL Error Code : {0}\n" +
+                                            "SQL Error Number : {1}\n" +
+                                            "SQL Message :\n{2}",
+                                                sqlEx.ErrorCode, sqlEx.Number, sqlEx.Message
+                                            )
+                                            , Application.ProductName);
+                                    }
+                                }
+
+                            }
                         }
 
-                        //TODO: Implement for other relations!
 
-                        //Execute the update command
-                        if(command.ExecuteNonQuery() > 0)
-                        {
-                            MessageBox.Show("Insert successful!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-
-
-                           
                     }
-                } catch (Exception ex)
+                }
+
+                catch (Exception ex)
                 {
                     CommonFunctions.InvokeErrorMsg(ex.Message, Application.ProductName);
                 }
@@ -191,8 +361,6 @@ namespace ArsipNilai
             {
 
             }
-
-            this.Close();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
