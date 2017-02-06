@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace ArsipNilai
 {
-    public partial class Form1 : Form
+    public partial class frmMain : Form
     {
-        public Form1()
+        public frmMain()
         {
             InitializeComponent();
         }
 
-        static String connectionString = "Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
+        public static String connectionString = "Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
         static String RelationLabelInterfaceText = "Showing contents for relation : ";
 
         private void btnShowAllData_Click(object sender, EventArgs e)
@@ -35,8 +35,8 @@ namespace ArsipNilai
                 {
                     conn.Open();
 
-                    SqlCommand command = new SqlCommand("SELECT * FROM @relName", conn);
-                    command.Parameters.Add(new SqlParameter("relName", RelationName));
+                    SqlCommand command = new SqlCommand(String.Format("SELECT * FROM {0}", RelationName), conn);
+                    //command.Parameters.Add(new SqlParameter("@relName", RelationName));
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -48,7 +48,7 @@ namespace ArsipNilai
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Arsip Nilai", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Stop);
             }
         }
 
@@ -58,10 +58,31 @@ namespace ArsipNilai
             lblActiveRelation.Text = RelationLabelInterfaceText + "Student";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnTampilDataSemester_Click(object sender, EventArgs e)
         {
             ShowContentRoutine("SemesterData", ref dgvAnyData);
             lblActiveRelation.Text = RelationLabelInterfaceText + "SemesterData";
+        }
+
+        private void btnTampilDataMataKuliah_Click(object sender, EventArgs e)
+        {
+            ShowContentRoutine("Courses", ref dgvAnyData);
+            lblActiveRelation.Text = RelationLabelInterfaceText + "Courses";
+        }
+
+        private void btnTampilDataNilai_Click(object sender, EventArgs e)
+        {
+            ShowContentRoutine("Scores", ref dgvAnyData);
+            lblActiveRelation.Text = RelationLabelInterfaceText + "Scores";
+        }
+
+        private void btnTambahMahasiswa_Click(object sender, EventArgs e)
+        {
+            if(new dlgEditData("Student").ShowDialog() == DialogResult.OK)
+            {
+                //refresh the list
+                btnTampilMahasiswa.PerformClick();
+            }
         }
     }
 }

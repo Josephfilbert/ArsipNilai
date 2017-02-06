@@ -1,6 +1,6 @@
 ﻿namespace ArsipNilai
 {
-    partial class Form1
+    partial class frmMain
     {
         /// <summary>
         /// Required designer variable.
@@ -32,8 +32,12 @@
             this.tabQuery = new System.Windows.Forms.TabPage();
             this.btnShowAllData = new System.Windows.Forms.Button();
             this.tabManipulation = new System.Windows.Forms.TabPage();
+            this.grpDataNilai = new System.Windows.Forms.GroupBox();
+            this.btnTampilDataNilai = new System.Windows.Forms.Button();
+            this.grpDataMataKuliah = new System.Windows.Forms.GroupBox();
+            this.btnTampilDataMataKuliah = new System.Windows.Forms.Button();
             this.grpDataSemester = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnTampilDataSemester = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblSelectedRow = new System.Windows.Forms.ToolStripStatusLabel();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,9 +45,12 @@
             this.dgvAnyData = new System.Windows.Forms.DataGridView();
             this.grpMahasiswa = new System.Windows.Forms.GroupBox();
             this.btnTampilMahasiswa = new System.Windows.Forms.Button();
+            this.btnTambahMahasiswa = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabQuery.SuspendLayout();
             this.tabManipulation.SuspendLayout();
+            this.grpDataNilai.SuspendLayout();
+            this.grpDataMataKuliah.SuspendLayout();
             this.grpDataSemester.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvAnyData)).BeginInit();
@@ -86,6 +93,8 @@
             // 
             // tabManipulation
             // 
+            this.tabManipulation.Controls.Add(this.grpDataNilai);
+            this.tabManipulation.Controls.Add(this.grpDataMataKuliah);
             this.tabManipulation.Controls.Add(this.grpDataSemester);
             this.tabManipulation.Controls.Add(this.statusStrip1);
             this.tabManipulation.Controls.Add(this.label1);
@@ -100,25 +109,65 @@
             this.tabManipulation.Text = "Data Manipulation";
             this.tabManipulation.UseVisualStyleBackColor = true;
             // 
+            // grpDataNilai
+            // 
+            this.grpDataNilai.Controls.Add(this.btnTampilDataNilai);
+            this.grpDataNilai.Location = new System.Drawing.Point(441, 6);
+            this.grpDataNilai.Name = "grpDataNilai";
+            this.grpDataNilai.Size = new System.Drawing.Size(137, 113);
+            this.grpDataNilai.TabIndex = 6;
+            this.grpDataNilai.TabStop = false;
+            this.grpDataNilai.Text = "Data Nilai";
+            // 
+            // btnTampilDataNilai
+            // 
+            this.btnTampilDataNilai.Location = new System.Drawing.Point(11, 28);
+            this.btnTampilDataNilai.Name = "btnTampilDataNilai";
+            this.btnTampilDataNilai.Size = new System.Drawing.Size(106, 33);
+            this.btnTampilDataNilai.TabIndex = 0;
+            this.btnTampilDataNilai.Text = "Tampilkan";
+            this.btnTampilDataNilai.UseVisualStyleBackColor = true;
+            this.btnTampilDataNilai.Click += new System.EventHandler(this.btnTampilDataNilai_Click);
+            // 
+            // grpDataMataKuliah
+            // 
+            this.grpDataMataKuliah.Controls.Add(this.btnTampilDataMataKuliah);
+            this.grpDataMataKuliah.Location = new System.Drawing.Point(298, 6);
+            this.grpDataMataKuliah.Name = "grpDataMataKuliah";
+            this.grpDataMataKuliah.Size = new System.Drawing.Size(137, 113);
+            this.grpDataMataKuliah.TabIndex = 5;
+            this.grpDataMataKuliah.TabStop = false;
+            this.grpDataMataKuliah.Text = "Data Mata Kuliah";
+            // 
+            // btnTampilDataMataKuliah
+            // 
+            this.btnTampilDataMataKuliah.Location = new System.Drawing.Point(11, 28);
+            this.btnTampilDataMataKuliah.Name = "btnTampilDataMataKuliah";
+            this.btnTampilDataMataKuliah.Size = new System.Drawing.Size(106, 33);
+            this.btnTampilDataMataKuliah.TabIndex = 0;
+            this.btnTampilDataMataKuliah.Text = "Tampilkan";
+            this.btnTampilDataMataKuliah.UseVisualStyleBackColor = true;
+            this.btnTampilDataMataKuliah.Click += new System.EventHandler(this.btnTampilDataMataKuliah_Click);
+            // 
             // grpDataSemester
             // 
-            this.grpDataSemester.Controls.Add(this.button1);
-            this.grpDataSemester.Location = new System.Drawing.Point(307, 6);
+            this.grpDataSemester.Controls.Add(this.btnTampilDataSemester);
+            this.grpDataSemester.Location = new System.Drawing.Point(155, 6);
             this.grpDataSemester.Name = "grpDataSemester";
-            this.grpDataSemester.Size = new System.Drawing.Size(289, 99);
+            this.grpDataSemester.Size = new System.Drawing.Size(137, 113);
             this.grpDataSemester.TabIndex = 1;
             this.grpDataSemester.TabStop = false;
             this.grpDataSemester.Text = "Data Semester";
             // 
-            // button1
+            // btnTampilDataSemester
             // 
-            this.button1.Location = new System.Drawing.Point(11, 28);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(106, 33);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Tampilkan";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnTampilDataSemester.Location = new System.Drawing.Point(11, 28);
+            this.btnTampilDataSemester.Name = "btnTampilDataSemester";
+            this.btnTampilDataSemester.Size = new System.Drawing.Size(106, 33);
+            this.btnTampilDataSemester.TabIndex = 0;
+            this.btnTampilDataSemester.Text = "Tampilkan";
+            this.btnTampilDataSemester.UseVisualStyleBackColor = true;
+            this.btnTampilDataSemester.Click += new System.EventHandler(this.btnTampilDataSemester_Click);
             // 
             // statusStrip1
             // 
@@ -151,9 +200,9 @@
             this.lblActiveRelation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblActiveRelation.Location = new System.Drawing.Point(9, 223);
             this.lblActiveRelation.Name = "lblActiveRelation";
-            this.lblActiveRelation.Size = new System.Drawing.Size(232, 26);
+            this.lblActiveRelation.Size = new System.Drawing.Size(185, 13);
             this.lblActiveRelation.TabIndex = 2;
-            this.lblActiveRelation.Text = "Showing contents for relation : Relation\r\nName";
+            this.lblActiveRelation.Text = "Showing contents for relation : ";
             // 
             // dgvAnyData
             // 
@@ -163,16 +212,18 @@
             this.dgvAnyData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvAnyData.Location = new System.Drawing.Point(0, 259);
             this.dgvAnyData.Name = "dgvAnyData";
+            this.dgvAnyData.ReadOnly = true;
             this.dgvAnyData.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvAnyData.Size = new System.Drawing.Size(1031, 219);
             this.dgvAnyData.TabIndex = 1;
             // 
             // grpMahasiswa
             // 
+            this.grpMahasiswa.Controls.Add(this.btnTambahMahasiswa);
             this.grpMahasiswa.Controls.Add(this.btnTampilMahasiswa);
             this.grpMahasiswa.Location = new System.Drawing.Point(12, 6);
             this.grpMahasiswa.Name = "grpMahasiswa";
-            this.grpMahasiswa.Size = new System.Drawing.Size(289, 99);
+            this.grpMahasiswa.Size = new System.Drawing.Size(137, 113);
             this.grpMahasiswa.TabIndex = 0;
             this.grpMahasiswa.TabStop = false;
             this.grpMahasiswa.Text = "Data Mahasiswa";
@@ -187,18 +238,30 @@
             this.btnTampilMahasiswa.UseVisualStyleBackColor = true;
             this.btnTampilMahasiswa.Click += new System.EventHandler(this.btnTampilMahasiswa_Click);
             // 
-            // Form1
+            // btnTambahMahasiswa
+            // 
+            this.btnTambahMahasiswa.Location = new System.Drawing.Point(11, 67);
+            this.btnTambahMahasiswa.Name = "btnTambahMahasiswa";
+            this.btnTambahMahasiswa.Size = new System.Drawing.Size(106, 33);
+            this.btnTambahMahasiswa.TabIndex = 1;
+            this.btnTambahMahasiswa.Text = "Tambah";
+            this.btnTambahMahasiswa.UseVisualStyleBackColor = true;
+            this.btnTambahMahasiswa.Click += new System.EventHandler(this.btnTambahMahasiswa_Click);
+            // 
+            // frmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1038, 501);
             this.Controls.Add(this.tabControl1);
-            this.Name = "Form1";
+            this.Name = "frmMain";
             this.Text = "Arsip Nilai";
             this.tabControl1.ResumeLayout(false);
             this.tabQuery.ResumeLayout(false);
             this.tabManipulation.ResumeLayout(false);
             this.tabManipulation.PerformLayout();
+            this.grpDataNilai.ResumeLayout(false);
+            this.grpDataMataKuliah.ResumeLayout(false);
             this.grpDataSemester.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -222,7 +285,12 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel lblSelectedRow;
         private System.Windows.Forms.GroupBox grpDataSemester;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnTampilDataSemester;
+        private System.Windows.Forms.GroupBox grpDataMataKuliah;
+        private System.Windows.Forms.Button btnTampilDataMataKuliah;
+        private System.Windows.Forms.GroupBox grpDataNilai;
+        private System.Windows.Forms.Button btnTampilDataNilai;
+        private System.Windows.Forms.Button btnTambahMahasiswa;
     }
 }
 
