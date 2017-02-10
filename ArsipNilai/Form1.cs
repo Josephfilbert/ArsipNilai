@@ -76,22 +76,37 @@ namespace ArsipNilai
             lblActiveRelation.Text = RelationLabelInterfaceText + "Scores";
         }
 
-        private void btnTambahMahasiswa_Click(object sender, EventArgs e)
+        private void tombol_tambah_Click(object sender, EventArgs e)
         {
-            if(new dlgEditData("Student").ShowDialog() == DialogResult.OK)
+            Button button = (Button)sender;
+            string relationName;
+            string tampilButtonName;
+
+            if (button.Name == "btnTambahMahasiswa")
             {
-                //refresh the list
-                btnTampilMahasiswa.PerformClick();
+                relationName = "Student";
+                tampilButtonName = "btnTampilMahasiswa";
+            }
+            else if (button.Name == "btnTambahMataKuliah")
+            {
+                relationName = "Courses";
+                tampilButtonName = "btnTampilDataMataKuliah";
+            }
+            else if (button.Name == "btnTambahSemester")
+            {
+                relationName = "SemesterData";
+                tampilButtonName = "btnTampilDataSemester";
+            }
+            //add more for data nilai!
+            else return;
+
+            if(new dlgEditData(relationName).ShowDialog() == DialogResult.OK)
+            {
+                Button tampilButton = (Button)this.Controls.Find(tampilButtonName, true).FirstOrDefault();
+                tampilButton.PerformClick();
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if(new dlgEditData("SemesterData").ShowDialog() == DialogResult.OK)
-            {
-                //refresh the list
-                btnTampilDataSemester.PerformClick();
-            }
-        }
+        
     }
 }

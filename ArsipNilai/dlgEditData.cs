@@ -131,7 +131,7 @@ namespace ArsipNilai
                             txtField2.Visible = txtField3.Visible = txtField4.Visible = txtField5.Visible = false;
                             txtField2.Enabled = txtField3.Enabled = txtField4.Enabled = txtField5.Enabled = false;
 
-                            //the first key is foreign key so set the available data
+                            //get available Students
                             using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
                             {
 
@@ -153,7 +153,7 @@ namespace ArsipNilai
                                 }
                             }
 
-                            //cboKey1.BindingContext = this.BindingContext;
+                            //make it drop down only and set first item as default
                             cboKey1.DropDownStyle = ComboBoxStyle.DropDownList;
                             cboKey1.SelectedIndex = 0;
 
@@ -167,6 +167,16 @@ namespace ArsipNilai
                         {
                             //all fields used, change all combo box to Text Box mode
                             cboKey1.DropDownStyle = cboKey2.DropDownStyle = cboKey3.DropDownStyle = ComboBoxStyle.Simple;
+
+                            //set the labels
+                            lblKey1.Text = "Course Code :";
+                            lblKey2.Text = "Course Name :";
+                            lblKey3.Text = "Theory Credit :";
+                            lblField1.Text = "Practicum Credit :";
+                            lblField2.Text = "TM Weight :";
+                            lblField3.Text = "UTS Weight :";
+                            lblField4.Text = "Practicum Weight :";
+                            lblField5.Text = "UAS Weight :";
                         }
                         
                     }
@@ -232,6 +242,34 @@ namespace ArsipNilai
                     CommonFunctions.InvokeErrorMsg("The semester year should be numeric!", Application.ProductName);
                     return;
                 }
+
+            }
+
+            else if (relationName == "Courses")
+            {
+                //check course code
+                if(String.IsNullOrWhiteSpace(cboKey1.Text) || !(cboKey1.Text.Length == 8) || CommonFunctions.IsNumeric(cboKey1.Text.Substring(0, 4)) || !CommonFunctions.IsNumeric(cboKey1.Text.Substring(4, 4)))
+                {
+                    CommonFunctions.InvokeErrorMsg("The format of course code should be AAAA0000", Application.ProductName);
+                    return;
+                }
+
+                //check other attributes, it shouldn't be empty
+                if (string.IsNullOrWhiteSpace(cboKey2.Text) || string.IsNullOrWhiteSpace(cboKey3.Text) || string.IsNullOrWhiteSpace(txtField1.Text) ||
+                    string.IsNullOrWhiteSpace(txtField2.Text) || string.IsNullOrWhiteSpace(txtField3.Text) || string.IsNullOrWhiteSpace(txtField4.Text) ||
+                    string.IsNullOrWhiteSpace(txtField5.Text))
+                {
+                    CommonFunctions.InvokeErrorMsg("The attributes cannot be empty!", Application.ProductName);
+                    return;
+                }
+                
+                //numeric validation
+                if(!CommonFunctions.IsNumeric(txtField2.Text) || !CommonFunctions.IsNumeric(txtField3.Text) || !CommonFunctions.IsNumeric(txtField4.Text) ||
+                    !CommonFunctions.IsNumeric(txtField5.Text))
+                {
+                    CommonFunctions.InvokeErrorMsg("The weight values should be numeric!", Application.ProductName);
+                    return;
+                } 
 
             }
 
@@ -340,6 +378,52 @@ namespace ArsipNilai
                                                 sqlEx.ErrorCode, sqlEx.Number, sqlEx.Message
                                             )
                                             , Application.ProductName);
+                                    }
+                                }
+
+                            }
+
+                            else if(relationName == "Courses")
+                            {
+                                command.CommandText = "INSERT INTO Courses (CourseCode, CourseName, TheoryCredit, PracticumCredit, TMWeight, UTSWeight, PracticumWeight, UASWeight) VALUES (@1, @2, @3, @4, @5, @6, @7, @8)";
+
+                                command.Parameters.Add(new SqlParameter("1", cboKey1.Text));
+                                command.Parameters.Add(new SqlParameter("2", cboKey2.Text));
+                                command.Parameters.Add(new SqlParameter("3", short.Parse(cboKey3.Text)));
+                                command.Parameters.Add(new SqlParameter("4", short.Parse(txtField1.Text)));
+                                command.Parameters.Add(new SqlParameter("5", short.Parse(txtField2.Text)));
+                                command.Parameters.Add(new SqlParameter("6", short.Parse(txtField3.Text)));
+                                command.Parameters.Add(new SqlParameter("7", short.Parse(txtField4.Text)));
+                                command.Parameters.Add(new SqlParameter("8", short.Parse(txtField5.Text)));
+
+                                try
+                                {
+                                    if(command.ExecuteNonQuery() > 0)
+                                    {
+                                        MessageBox.Show("Insert successful!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        this.DialogResult = DialogResult.OK;
+                                        this.Close();
+                                    }
+                                }
+                                catch (SqlException sqlEx)
+                                {
+                                    if (sqlEx.Number == 2627)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The course code already exists!", Application.ProductName);
+                                    }
+                                    else if(sqlEx.Number == 547)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The total weight must be 100!", Application.ProductName);
+                                    }
+                                    else
+                                    {
+                                        CommonFunctions.InvokeErrorMsg(String.Format(
+                                                "SQL Error Code : {0}\n" +
+                                                "SQL Error Number : {1}\n" +
+                                                "SQL Message :\n{2}",
+                                                    sqlEx.ErrorCode, sqlEx.Number, sqlEx.Message
+                                                )
+                                                , Application.ProductName);
                                     }
                                 }
 

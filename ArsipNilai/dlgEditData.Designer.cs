@@ -58,7 +58,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.btnCancel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.btnOK, 0, 0);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(249, 239);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(285, 239);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -121,7 +121,7 @@
             // 
             // txtField1
             // 
-            this.txtField1.Location = new System.Drawing.Point(96, 98);
+            this.txtField1.Location = new System.Drawing.Point(132, 98);
             this.txtField1.Name = "txtField1";
             this.txtField1.Size = new System.Drawing.Size(318, 20);
             this.txtField1.TabIndex = 8;
@@ -137,7 +137,7 @@
             // 
             // txtField5
             // 
-            this.txtField5.Location = new System.Drawing.Point(96, 202);
+            this.txtField5.Location = new System.Drawing.Point(132, 202);
             this.txtField5.Name = "txtField5";
             this.txtField5.Size = new System.Drawing.Size(318, 20);
             this.txtField5.TabIndex = 16;
@@ -153,7 +153,7 @@
             // 
             // txtField4
             // 
-            this.txtField4.Location = new System.Drawing.Point(96, 176);
+            this.txtField4.Location = new System.Drawing.Point(132, 176);
             this.txtField4.Name = "txtField4";
             this.txtField4.Size = new System.Drawing.Size(318, 20);
             this.txtField4.TabIndex = 14;
@@ -169,7 +169,7 @@
             // 
             // txtField3
             // 
-            this.txtField3.Location = new System.Drawing.Point(96, 150);
+            this.txtField3.Location = new System.Drawing.Point(132, 150);
             this.txtField3.Name = "txtField3";
             this.txtField3.Size = new System.Drawing.Size(318, 20);
             this.txtField3.TabIndex = 12;
@@ -185,7 +185,7 @@
             // 
             // txtField2
             // 
-            this.txtField2.Location = new System.Drawing.Point(96, 124);
+            this.txtField2.Location = new System.Drawing.Point(132, 124);
             this.txtField2.Name = "txtField2";
             this.txtField2.Size = new System.Drawing.Size(318, 20);
             this.txtField2.TabIndex = 10;
@@ -203,7 +203,7 @@
             // 
             this.cboKey1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboKey1.FormattingEnabled = true;
-            this.cboKey1.Location = new System.Drawing.Point(96, 21);
+            this.cboKey1.Location = new System.Drawing.Point(132, 21);
             this.cboKey1.Name = "cboKey1";
             this.cboKey1.Size = new System.Drawing.Size(317, 21);
             this.cboKey1.TabIndex = 17;
@@ -212,7 +212,7 @@
             // 
             this.cboKey2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboKey2.FormattingEnabled = true;
-            this.cboKey2.Location = new System.Drawing.Point(96, 45);
+            this.cboKey2.Location = new System.Drawing.Point(132, 45);
             this.cboKey2.Name = "cboKey2";
             this.cboKey2.Size = new System.Drawing.Size(317, 21);
             this.cboKey2.TabIndex = 18;
@@ -221,7 +221,7 @@
             // 
             this.cboKey3.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cboKey3.FormattingEnabled = true;
-            this.cboKey3.Location = new System.Drawing.Point(97, 71);
+            this.cboKey3.Location = new System.Drawing.Point(133, 71);
             this.cboKey3.Name = "cboKey3";
             this.cboKey3.Size = new System.Drawing.Size(317, 21);
             this.cboKey3.TabIndex = 19;
@@ -230,7 +230,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 288);
+            this.ClientSize = new System.Drawing.Size(463, 288);
             this.Controls.Add(this.cboKey3);
             this.Controls.Add(this.cboKey2);
             this.Controls.Add(this.cboKey1);

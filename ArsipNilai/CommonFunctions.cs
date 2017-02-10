@@ -24,5 +24,14 @@ namespace ArsipNilai
         {
             return (int)Math.Ceiling(Math.Log10(num));
         }
+
+        public static bool StrGrpIsNullOrWhiteSpace(String[] strings)
+        {
+            for(int i=0; i<strings.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(strings[i])) return true;
+            }
+            return false;
+        }
     }
 }
