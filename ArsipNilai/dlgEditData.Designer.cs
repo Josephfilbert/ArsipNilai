@@ -202,15 +202,18 @@
             // cboKey1
             // 
             this.cboKey1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboKey1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboKey1.FormattingEnabled = true;
             this.cboKey1.Location = new System.Drawing.Point(132, 21);
             this.cboKey1.Name = "cboKey1";
             this.cboKey1.Size = new System.Drawing.Size(317, 21);
             this.cboKey1.TabIndex = 17;
+            this.cboKey1.SelectedIndexChanged += new System.EventHandler(this.cboKey1_SelectedIndexChanged);
             // 
             // cboKey2
             // 
             this.cboKey2.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboKey2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboKey2.FormattingEnabled = true;
             this.cboKey2.Location = new System.Drawing.Point(132, 45);
             this.cboKey2.Name = "cboKey2";
@@ -220,6 +223,7 @@
             // cboKey3
             // 
             this.cboKey3.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboKey3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboKey3.FormattingEnabled = true;
             this.cboKey3.Location = new System.Drawing.Point(133, 71);
             this.cboKey3.Name = "cboKey3";

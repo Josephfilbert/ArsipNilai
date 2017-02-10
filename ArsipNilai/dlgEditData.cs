@@ -53,142 +53,7 @@ namespace ArsipNilai
             key3 = k3;
             this.Text = relName;
 
-            try
-            {
-                //connect to database
-                using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
-                {
-                    conn.Open();
-
-                    /*
-                    //get primary keys and foreign keys
-                    List<String> primaryKeys, foreignKeys;
-
-                    //get primary key and foreign keys
-                    primaryKeys = new List<string>();
-                    foreignKeys = new List<string>();
-
-                    //obtain primary keys and foreign keys of relation
-                    using (SqlCommand command = new SqlCommand(String.Format("select CONSTRAINT_TYPE, COLUMN_NAME from INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE cc on tc.CONSTRAINT_NAME = cc.CONSTRAINT_NAME and tc.TABLE_NAME = cc.TABLE_NAME where (CONSTRAINT_TYPE = 'PRIMARY KEY' or CONSTRAINT_TYPE = 'FOREIGN KEY') and cc.TABLE_NAME = {0}", relName), conn))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            //populate the primary keys and foreign keys
-                            while(reader.Read())
-                            {
-                                if(reader.GetString(0) == "PRIMARY KEY")
-                                {
-                                    primaryKeys.Add(reader.GetString(1));
-                                } else
-                                {
-                                    foreignKeys.Add(reader.GetString(1));
-                                }
-                            }
-                        }
-                    }
-                    */
-
-                    //we already know the keys in each relation so we can directly specify it
-
-                    #region "UI Processing"
-                    //check operation mode
-                    if (k1 == null)
-                    {
-                        //if key1 is null, then it is data insertion mode
-                        opMode = OperationMode.Insert;
-                        this.Text = "Insert into " + this.Text;
-
-                        //check relation name, it determines number of key fields to be active
-                        if(relName == "Student")
-                        {
-                            //hide the key2 and key3 field
-                            lblKey2.Visible = lblKey3.Visible = cboKey2.Visible = cboKey2.Enabled = cboKey3.Visible = cboKey3.Enabled = false;
-
-                            //also the Student relation has 3 non-primary key fields so hide the last 2 fields
-                            lblField4.Visible = lblField5.Visible = txtField4.Visible = txtField5.Visible = false;
-
-                            //the first key is the new key, disable the dropdown button
-                            cboKey1.DropDownStyle = ComboBoxStyle.Simple;
-
-                            //set the attribute labels
-                            lblKey1.Text = "NIM :";
-                            lblField1.Text = "Name :";
-                            lblField2.Text = "Program :";
-                            lblField3.Text = "Enroll Year :";
-                        }
-
-                        //TODO: Implement for other relations!!!
-                        else if(relName == "SemesterData")
-                        {
-                            //only 2 keys required
-                            lblKey3.Visible = cboKey3.Visible = cboKey3.Enabled = false;
-
-                            //used to insert new semester
-                            cboKey2.DropDownStyle = ComboBoxStyle.Simple;
-
-                            //only 1 field required
-                            lblField2.Visible = lblField3.Visible = lblField4.Visible = lblField5.Visible = false;
-                            txtField2.Visible = txtField3.Visible = txtField4.Visible = txtField5.Visible = false;
-                            txtField2.Enabled = txtField3.Enabled = txtField4.Enabled = txtField5.Enabled = false;
-
-                            //get available Students
-                            using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
-                            {
-
-                                using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
-                                {
-                                    if (reader.Read())
-                                    {
-                                        cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
-                                        while(reader.Read())
-                                        {
-                                            cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                        return;
-                                    }
-                                }
-                            }
-
-                            //make it drop down only and set first item as default
-                            cboKey1.DropDownStyle = ComboBoxStyle.DropDownList;
-                            cboKey1.SelectedIndex = 0;
-
-                            //set the labels
-                            lblKey1.Text = "NIM :";
-                            lblKey2.Text = "Semester :";
-                            lblField1.Text = "Semester Year :";
-                        }
-
-                        else if (relName == "Courses")
-                        {
-                            //all fields used, change all combo box to Text Box mode
-                            cboKey1.DropDownStyle = cboKey2.DropDownStyle = cboKey3.DropDownStyle = ComboBoxStyle.Simple;
-
-                            //set the labels
-                            lblKey1.Text = "Course Code :";
-                            lblKey2.Text = "Course Name :";
-                            lblKey3.Text = "Theory Credit :";
-                            lblField1.Text = "Practicum Credit :";
-                            lblField2.Text = "TM Weight :";
-                            lblField3.Text = "UTS Weight :";
-                            lblField4.Text = "Practicum Weight :";
-                            lblField5.Text = "UAS Weight :";
-                        }
-                        
-                    }
-
-                    //TODO: Implement for other relations!!!!
-
-                    #endregion
-                }
-            } catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Arsip Nilai", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+           
 
         }
 
@@ -452,9 +317,188 @@ namespace ArsipNilai
             this.Close();
         }
 
+        //called only when using Student relation
+        private void cboKey1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void dlgEditData_Load(object sender, EventArgs e)
         {
-            
+            try
+            {
+                //connect to database
+                using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
+                {
+                    conn.Open();
+
+                    /*
+                    //get primary keys and foreign keys
+                    List<String> primaryKeys, foreignKeys;
+
+                    //get primary key and foreign keys
+                    primaryKeys = new List<string>();
+                    foreignKeys = new List<string>();
+
+                    //obtain primary keys and foreign keys of relation
+                    using (SqlCommand command = new SqlCommand(String.Format("select CONSTRAINT_TYPE, COLUMN_NAME from INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE cc on tc.CONSTRAINT_NAME = cc.CONSTRAINT_NAME and tc.TABLE_NAME = cc.TABLE_NAME where (CONSTRAINT_TYPE = 'PRIMARY KEY' or CONSTRAINT_TYPE = 'FOREIGN KEY') and cc.TABLE_NAME = {0}", relName), conn))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            //populate the primary keys and foreign keys
+                            while(reader.Read())
+                            {
+                                if(reader.GetString(0) == "PRIMARY KEY")
+                                {
+                                    primaryKeys.Add(reader.GetString(1));
+                                } else
+                                {
+                                    foreignKeys.Add(reader.GetString(1));
+                                }
+                            }
+                        }
+                    }
+                    */
+
+                    //we already know the keys in each relation so we can directly specify it
+
+                    #region "UI Processing"
+                    //check operation mode
+                    if (key1 == null)
+                    {
+                        //if key1 is null, then it is data insertion mode
+                        opMode = OperationMode.Insert;
+                        this.Text = "Insert into " + this.Text;
+
+                        //check relation name, it determines number of key fields to be active
+                        if (relationName == "Student")
+                        {
+                            //hide the key2 and key3 field
+                            lblKey2.Visible = lblKey3.Visible = cboKey2.Visible = cboKey2.Enabled = cboKey3.Visible = cboKey3.Enabled = false;
+
+                            //also the Student relation has 3 non-primary key fields so hide the last 2 fields
+                            lblField4.Visible = lblField5.Visible = txtField4.Visible = txtField5.Visible = false;
+
+                            //the first key is the new key, disable the dropdown button
+                            cboKey1.DropDownStyle = ComboBoxStyle.Simple;
+
+                            //set the attribute labels
+                            lblKey1.Text = "NIM :";
+                            lblField1.Text = "Name :";
+                            lblField2.Text = "Program :";
+                            lblField3.Text = "Enroll Year :";
+                        }
+
+                        //TODO: Implement for other relations!!!
+                        else if (relationName == "SemesterData")
+                        {
+                            //only 2 keys required
+                            lblKey3.Visible = cboKey3.Visible = cboKey3.Enabled = false;
+
+                            //used to insert new semester
+                            cboKey2.DropDownStyle = ComboBoxStyle.Simple;
+
+                            //only 1 field required
+                            lblField2.Visible = lblField3.Visible = lblField4.Visible = lblField5.Visible = false;
+                            txtField2.Visible = txtField3.Visible = txtField4.Visible = txtField5.Visible = false;
+                            txtField2.Enabled = txtField3.Enabled = txtField4.Enabled = txtField5.Enabled = false;
+
+                            //get available Students
+                            using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
+                            {
+
+                                using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
+                                {
+                                    if (reader.Read())
+                                    {
+                                        cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        while (reader.Read())
+                                        {
+                                            cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return;
+                                    }
+                                }
+                            }
+
+                            //make it drop down only and set first item as default
+                            //cboKey1.DropDownStyle = ComboBoxStyle.DropDownList;
+                            cboKey1.SelectedIndex = 0;
+
+                            //set the labels
+                            lblKey1.Text = "NIM :";
+                            lblKey2.Text = "Semester :";
+                            lblField1.Text = "Semester Year :";
+                        }
+
+                        else if (relationName == "Courses")
+                        {
+                            //all fields used, change all combo box to Text Box mode
+                            cboKey1.DropDownStyle = cboKey2.DropDownStyle = cboKey3.DropDownStyle = ComboBoxStyle.Simple;
+
+                            //set the labels
+                            lblKey1.Text = "Course Code :";
+                            lblKey2.Text = "Course Name :";
+                            lblKey3.Text = "Theory Credit :";
+                            lblField1.Text = "Practicum Credit :";
+                            lblField2.Text = "TM Weight :";
+                            lblField3.Text = "UTS Weight :";
+                            lblField4.Text = "Practicum Weight :";
+                            lblField5.Text = "UAS Weight :";
+                        }
+
+                    }
+
+                    else if (relationName == "Scores")
+                    {
+                        //set the labels
+                        lblKey1.Text = "NIM :";
+                        lblKey2.Text = "Semester :";
+                        lblKey3.Text = "Course Code :";
+                        lblField1.Text = "Class :";
+                        lblField2.Text = "TM :";
+                        lblField3.Text = "UTS :";
+                        lblField4.Text = "UAS :";
+                        lblField5.Text = "UAP :";
+
+                        //key 2 and key 3 field will be disabled by default until the a student is selected
+
+                        //get available Students
+                        using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
+                        {
+
+                            using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
+                            {
+                                if (reader.Read())
+                                {
+                                    cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                    while (reader.Read())
+                                    {
+                                        cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                    }
+                                }
+                                else
+                                {
+                                    MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    //TODO: Implement for other relations!!!!
+
+                    #endregion
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Arsip Nilai", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void dlgEditData_FormClosing(object sender, FormClosingEventArgs e)
