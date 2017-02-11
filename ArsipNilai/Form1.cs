@@ -97,7 +97,11 @@ namespace ArsipNilai
                 relationName = "SemesterData";
                 tampilButtonName = "btnTampilDataSemester";
             }
-            //add more for data nilai!
+            else if(button.Name == "btnTambahNilai")
+            {
+                relationName = "Scores";
+                tampilButtonName = "btnTampilDataNilai";
+            }
             else return;
 
             if(new dlgEditData(relationName).ShowDialog() == DialogResult.OK)
@@ -106,7 +110,5 @@ namespace ArsipNilai
                 tampilButton.PerformClick();
             }
         }
-
-        
     }
 }

@@ -317,10 +317,92 @@ namespace ArsipNilai
             this.Close();
         }
 
-        //called only when using Student relation
         private void cboKey1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (relationName != "Scores") return;
 
+            //clear the combo box 2 and 3
+            cboKey2.Items.Clear();
+            cboKey3.Items.Clear();
+
+            //get available semesters, apply the change to cboKey2 (semester select)
+            using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
+            {
+                conn.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    //get semester
+                    command.Connection = conn;
+                    command.CommandText = "SELECT Semester FROM SemesterData WHERE NIM = @1";
+                    command.Parameters.Add(new SqlParameter("1", cboKey1.Text.Substring(0, 10)));
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    //do read
+                    if(reader.Read())
+                    {
+                        //add first item 
+                        cboKey2.Items.Add(reader["Semester"]);
+
+                        //add the rest
+                        while(reader.Read())
+                        {
+                            cboKey2.Items.Add(reader["Semester"]);
+                        }
+                    }
+                    else
+                    {
+                        //if there's no semester data for this student, cancel reading and disable the controls
+                        cboKey2.Enabled = cboKey3.Enabled = false;
+                        return;
+                    }
+
+                    //enable the control
+                    cboKey2.Enabled = true;
+                }
+            }
+        }
+
+        private void cboKey2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (relationName != "Scores") return;
+
+            //clear the cboKey3 list first
+            cboKey3.Items.Clear();
+
+            //get available courses
+            using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
+            {
+                conn.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = conn;
+
+                    //do a table join to get CourseCode with CourseName
+                    command.CommandText = "SELECT s.CourseCode, CourseName FROM Scores s JOIN Courses c ON s.CourseCode = c.CourseCode WHERE NIM = @1 AND Semester = @2";
+                    command.Parameters.Add(new SqlParameter("1", cboKey1.Text.Substring(0, 10)));
+                    command.Parameters.Add(new SqlParameter("2", cboKey2.Text));
+
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    if(reader.Read())
+                    {
+                        cboKey3.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+
+                        while(reader.Read())
+                            cboKey3.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+                    }
+                    else
+                    {
+                        cboKey3.Enabled = false;
+                        return;
+                    }
+
+                    cboKey3.Enabled = true;
+                }
+            }
         }
 
         private void dlgEditData_Load(object sender, EventArgs e)
@@ -451,48 +533,61 @@ namespace ArsipNilai
                             lblField5.Text = "UAS Weight :";
                         }
 
-                    }
-
-                    else if (relationName == "Scores")
-                    {
-                        //set the labels
-                        lblKey1.Text = "NIM :";
-                        lblKey2.Text = "Semester :";
-                        lblKey3.Text = "Course Code :";
-                        lblField1.Text = "Class :";
-                        lblField2.Text = "TM :";
-                        lblField3.Text = "UTS :";
-                        lblField4.Text = "UAS :";
-                        lblField5.Text = "UAP :";
-
-                        //key 2 and key 3 field will be disabled by default until the a student is selected
-
-                        //get available Students
-                        using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
+                        else if (relationName == "Scores")
                         {
+                            //set the labels
+                            lblKey1.Text = "NIM :";
+                            lblKey2.Text = "Semester :";
+                            lblKey3.Text = "Course Code :";
+                            lblField1.Text = "Class :";
+                            lblField2.Text = "TM :";
+                            lblField3.Text = "UTS :";
+                            lblField4.Text = "UAS :";
+                            lblField5.Text = "UAP :";
 
-                            using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
+                            //key 2 and key 3 field will be disabled by default until the a student is selected
+
+                            //get available Students
+                            using (SqlCommand cmdGetStudent = new SqlCommand("SELECT NIM, Name FROM Student ORDER BY NIM ASC", conn))
                             {
-                                if (reader.Read())
+
+                                using (SqlDataReader reader = cmdGetStudent.ExecuteReader())
                                 {
-                                    cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
-                                    while (reader.Read())
+                                    if (reader.Read())
                                     {
                                         cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        while (reader.Read())
+                                        {
+                                            cboKey1.Items.Add(reader["NIM"] + " - " + reader["Name"]);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                        return;
                                     }
                                 }
-                                else
-                                {
-                                    MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    return;
-                                }
                             }
+
+                            //disable 2 combo boxes because combo box 1 currently selected to nothing
+                            cboKey2.Enabled = cboKey3.Enabled = false;
                         }
                     }
+
+                    
 
                     //TODO: Implement for other relations!!!!
 
                     #endregion
+                }
+            }
+
+            catch (SqlException sqlEx)
+            {
+                if (sqlEx.Number == -1)
+                {
+                    CommonFunctions.InvokeErrorMsg("Failed establishing connection to database. Check if you are granted permission to database or SQL Server Service is running", Application.ProductName);
+                    this.Close();
                 }
             }
             catch (Exception ex)

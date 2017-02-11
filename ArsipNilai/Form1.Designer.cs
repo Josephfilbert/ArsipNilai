@@ -31,10 +31,11 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabQuery = new System.Windows.Forms.TabPage();
             this.btnShowAllData = new System.Windows.Forms.Button();
-            this.btnTambahDataSemester = new System.Windows.Forms.TabPage();
+            this.btnTambahDataNilai = new System.Windows.Forms.TabPage();
             this.grpDataNilai = new System.Windows.Forms.GroupBox();
             this.btnTampilDataNilai = new System.Windows.Forms.Button();
             this.grpDataMataKuliah = new System.Windows.Forms.GroupBox();
+            this.btnTambahMataKuliah = new System.Windows.Forms.Button();
             this.btnTampilDataMataKuliah = new System.Windows.Forms.Button();
             this.grpDataSemester = new System.Windows.Forms.GroupBox();
             this.btnTambahSemester = new System.Windows.Forms.Button();
@@ -47,10 +48,10 @@
             this.grpMahasiswa = new System.Windows.Forms.GroupBox();
             this.btnTambahMahasiswa = new System.Windows.Forms.Button();
             this.btnTampilMahasiswa = new System.Windows.Forms.Button();
-            this.btnTambahMataKuliah = new System.Windows.Forms.Button();
+            this.btnTambahNilai = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabQuery.SuspendLayout();
-            this.btnTambahDataSemester.SuspendLayout();
+            this.btnTambahDataNilai.SuspendLayout();
             this.grpDataNilai.SuspendLayout();
             this.grpDataMataKuliah.SuspendLayout();
             this.grpDataSemester.SuspendLayout();
@@ -65,7 +66,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabQuery);
-            this.tabControl1.Controls.Add(this.btnTambahDataSemester);
+            this.tabControl1.Controls.Add(this.btnTambahDataNilai);
             this.tabControl1.Location = new System.Drawing.Point(1, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -93,26 +94,28 @@
             this.btnShowAllData.UseVisualStyleBackColor = true;
             this.btnShowAllData.Click += new System.EventHandler(this.btnShowAllData_Click);
             // 
-            // btnTambahDataSemester
+            // btnTambahDataNilai
             // 
-            this.btnTambahDataSemester.Controls.Add(this.grpDataNilai);
-            this.btnTambahDataSemester.Controls.Add(this.grpDataMataKuliah);
-            this.btnTambahDataSemester.Controls.Add(this.grpDataSemester);
-            this.btnTambahDataSemester.Controls.Add(this.statusStrip1);
-            this.btnTambahDataSemester.Controls.Add(this.label1);
-            this.btnTambahDataSemester.Controls.Add(this.lblActiveRelation);
-            this.btnTambahDataSemester.Controls.Add(this.dgvAnyData);
-            this.btnTambahDataSemester.Controls.Add(this.grpMahasiswa);
-            this.btnTambahDataSemester.Location = new System.Drawing.Point(4, 22);
-            this.btnTambahDataSemester.Name = "btnTambahDataSemester";
-            this.btnTambahDataSemester.Padding = new System.Windows.Forms.Padding(3);
-            this.btnTambahDataSemester.Size = new System.Drawing.Size(1031, 474);
-            this.btnTambahDataSemester.TabIndex = 1;
-            this.btnTambahDataSemester.Text = "Data Manipulation";
-            this.btnTambahDataSemester.UseVisualStyleBackColor = true;
+            this.btnTambahDataNilai.Controls.Add(this.grpDataNilai);
+            this.btnTambahDataNilai.Controls.Add(this.grpDataMataKuliah);
+            this.btnTambahDataNilai.Controls.Add(this.grpDataSemester);
+            this.btnTambahDataNilai.Controls.Add(this.statusStrip1);
+            this.btnTambahDataNilai.Controls.Add(this.label1);
+            this.btnTambahDataNilai.Controls.Add(this.lblActiveRelation);
+            this.btnTambahDataNilai.Controls.Add(this.dgvAnyData);
+            this.btnTambahDataNilai.Controls.Add(this.grpMahasiswa);
+            this.btnTambahDataNilai.Location = new System.Drawing.Point(4, 22);
+            this.btnTambahDataNilai.Name = "btnTambahDataNilai";
+            this.btnTambahDataNilai.Padding = new System.Windows.Forms.Padding(3);
+            this.btnTambahDataNilai.Size = new System.Drawing.Size(1031, 474);
+            this.btnTambahDataNilai.TabIndex = 1;
+            this.btnTambahDataNilai.Text = "Data Manipulation";
+            this.btnTambahDataNilai.UseVisualStyleBackColor = true;
+            this.btnTambahDataNilai.Click += new System.EventHandler(this.tombol_tambah_Click);
             // 
             // grpDataNilai
             // 
+            this.grpDataNilai.Controls.Add(this.btnTambahNilai);
             this.grpDataNilai.Controls.Add(this.btnTampilDataNilai);
             this.grpDataNilai.Location = new System.Drawing.Point(441, 6);
             this.grpDataNilai.Name = "grpDataNilai";
@@ -141,6 +144,16 @@
             this.grpDataMataKuliah.TabIndex = 5;
             this.grpDataMataKuliah.TabStop = false;
             this.grpDataMataKuliah.Text = "Data Mata Kuliah";
+            // 
+            // btnTambahMataKuliah
+            // 
+            this.btnTambahMataKuliah.Location = new System.Drawing.Point(11, 67);
+            this.btnTambahMataKuliah.Name = "btnTambahMataKuliah";
+            this.btnTambahMataKuliah.Size = new System.Drawing.Size(106, 33);
+            this.btnTambahMataKuliah.TabIndex = 2;
+            this.btnTambahMataKuliah.Text = "Tambah";
+            this.btnTambahMataKuliah.UseVisualStyleBackColor = true;
+            this.btnTambahMataKuliah.Click += new System.EventHandler(this.tombol_tambah_Click);
             // 
             // btnTampilDataMataKuliah
             // 
@@ -262,15 +275,15 @@
             this.btnTampilMahasiswa.UseVisualStyleBackColor = true;
             this.btnTampilMahasiswa.Click += new System.EventHandler(this.btnTampilMahasiswa_Click);
             // 
-            // btnTambahMataKuliah
+            // btnTambahNilai
             // 
-            this.btnTambahMataKuliah.Location = new System.Drawing.Point(11, 67);
-            this.btnTambahMataKuliah.Name = "btnTambahMataKuliah";
-            this.btnTambahMataKuliah.Size = new System.Drawing.Size(106, 33);
-            this.btnTambahMataKuliah.TabIndex = 2;
-            this.btnTambahMataKuliah.Text = "Tambah";
-            this.btnTambahMataKuliah.UseVisualStyleBackColor = true;
-            this.btnTambahMataKuliah.Click += new System.EventHandler(this.tombol_tambah_Click);
+            this.btnTambahNilai.Location = new System.Drawing.Point(11, 67);
+            this.btnTambahNilai.Name = "btnTambahNilai";
+            this.btnTambahNilai.Size = new System.Drawing.Size(106, 33);
+            this.btnTambahNilai.TabIndex = 2;
+            this.btnTambahNilai.Text = "Tambah";
+            this.btnTambahNilai.UseVisualStyleBackColor = true;
+            this.btnTambahNilai.Click += new System.EventHandler(this.tombol_tambah_Click);
             // 
             // frmMain
             // 
@@ -282,8 +295,8 @@
             this.Text = "Arsip Nilai";
             this.tabControl1.ResumeLayout(false);
             this.tabQuery.ResumeLayout(false);
-            this.btnTambahDataSemester.ResumeLayout(false);
-            this.btnTambahDataSemester.PerformLayout();
+            this.btnTambahDataNilai.ResumeLayout(false);
+            this.btnTambahDataNilai.PerformLayout();
             this.grpDataNilai.ResumeLayout(false);
             this.grpDataMataKuliah.ResumeLayout(false);
             this.grpDataSemester.ResumeLayout(false);
@@ -300,7 +313,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabQuery;
         private System.Windows.Forms.Button btnShowAllData;
-        private System.Windows.Forms.TabPage btnTambahDataSemester;
+        private System.Windows.Forms.TabPage btnTambahDataNilai;
         private System.Windows.Forms.GroupBox grpMahasiswa;
         private System.Windows.Forms.Button btnTampilMahasiswa;
         private System.Windows.Forms.DataGridView dgvAnyData;
@@ -317,6 +330,7 @@
         private System.Windows.Forms.Button btnTambahMahasiswa;
         private System.Windows.Forms.Button btnTambahSemester;
         private System.Windows.Forms.Button btnTambahMataKuliah;
+        private System.Windows.Forms.Button btnTambahNilai;
     }
 }
 
