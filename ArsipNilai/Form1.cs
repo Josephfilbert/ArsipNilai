@@ -18,7 +18,7 @@ namespace ArsipNilai
             InitializeComponent();
         }
 
-        public static String connectionString = "Server=JOSEPH-NOTEBOOK\\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
+        public static String connectionString = @"Server=JOSEPH-NOTEBOOK\SQLEXPRESS;Database=ArsipNilai;Trusted_Connection=true";
         static String RelationLabelInterfaceText = "Showing contents for relation : ";
 
         private void btnShowAllData_Click(object sender, EventArgs e)
@@ -52,54 +52,34 @@ namespace ArsipNilai
             }
         }
 
-        private void btnTampilMahasiswa_Click(object sender, EventArgs e)
+        private void show_relation_button(Object sender, EventArgs e)
         {
-            ShowContentRoutine("Student", ref dgvAnyData);
-            lblActiveRelation.Text = RelationLabelInterfaceText + "Student";
-        }
-
-        private void btnTampilDataSemester_Click(object sender, EventArgs e)
-        {
-            ShowContentRoutine("SemesterData", ref dgvAnyData);
-            lblActiveRelation.Text = RelationLabelInterfaceText + "SemesterData";
-        }
-
-        private void btnTampilDataMataKuliah_Click(object sender, EventArgs e)
-        {
-            ShowContentRoutine("Courses", ref dgvAnyData);
-            lblActiveRelation.Text = RelationLabelInterfaceText + "Courses";
-        }
-
-        private void btnTampilDataNilai_Click(object sender, EventArgs e)
-        {
-            ShowContentRoutine("Scores", ref dgvAnyData);
-            lblActiveRelation.Text = RelationLabelInterfaceText + "Scores";
+            Button button = (Button)sender;
+            string rName = (string)button.Tag;
+            ShowContentRoutine(rName, ref dgvAnyData);
+            lblActiveRelation.Text = RelationLabelInterfaceText + rName;
         }
 
         private void tombol_tambah_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
-            string relationName;
+            string relationName = (string)button.Tag;
             string tampilButtonName;
 
-            if (button.Name == "btnTambahMahasiswa")
+            if (relationName == "Student")
             {
-                relationName = "Student";
                 tampilButtonName = "btnTampilMahasiswa";
             }
-            else if (button.Name == "btnTambahMataKuliah")
+            else if (relationName == "Courses")
             {
-                relationName = "Courses";
                 tampilButtonName = "btnTampilDataMataKuliah";
             }
-            else if (button.Name == "btnTambahSemester")
+            else if (relationName == "SemesterData")
             {
-                relationName = "SemesterData";
                 tampilButtonName = "btnTampilDataSemester";
             }
-            else if(button.Name == "btnTambahNilai")
+            else if(relationName == "Scores")
             {
-                relationName = "Scores";
                 tampilButtonName = "btnTampilDataNilai";
             }
             else return;

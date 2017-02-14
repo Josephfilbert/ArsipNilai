@@ -37,6 +37,8 @@ namespace ArsipNilai
         String key1, key2, key3;
         OperationMode opMode;
 
+        bool ShouldInsertUAPScore; //used for Score insertion
+
         public dlgEditData()
         {
             InitializeComponent();
@@ -136,6 +138,20 @@ namespace ArsipNilai
                     return;
                 } 
 
+            }
+
+            else if(relationName == "Scores")
+            {
+                //check the textboxes, it should be numeric and in 0..100 range
+                foreach(System.Windows.Forms.Control txtBoxes in this.Controls)
+                {
+                    //only text box should be checked
+                    if(txtBoxes.GetType() == typeof(TextBox))
+                    {
+                        //check the UAP field, if practicum credit is zero then no need to check
+
+                    }
+                }
             }
 
             #endregion
@@ -347,19 +363,18 @@ namespace ArsipNilai
 
                         //add the rest
                         while(reader.Read())
-                        {
                             cboKey2.Items.Add(reader["Semester"]);
-                        }
+
+                        //enable the control
+                        cboKey2.Enabled = true;
                     }
                     else
                     {
                         //if there's no semester data for this student, cancel reading and disable the controls
                         cboKey2.Enabled = cboKey3.Enabled = false;
-                        return;
                     }
 
-                    //enable the control
-                    cboKey2.Enabled = true;
+                    
                 }
             }
         }
@@ -383,7 +398,7 @@ namespace ArsipNilai
                     //do a table join to get CourseCode with CourseName
                     command.CommandText = "SELECT s.CourseCode, CourseName FROM Scores s JOIN Courses c ON s.CourseCode = c.CourseCode WHERE NIM = @1 AND Semester = @2";
                     command.Parameters.Add(new SqlParameter("1", cboKey1.Text.Substring(0, 10)));
-                    command.Parameters.Add(new SqlParameter("2", cboKey2.Text));
+                    command.Parameters.Add(new SqlParameter("2", short.Parse(cboKey2.Text)));
 
                     SqlDataReader reader = command.ExecuteReader();
 
@@ -393,14 +408,48 @@ namespace ArsipNilai
 
                         while(reader.Read())
                             cboKey3.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+
+                        cboKey3.Enabled = true;
                     }
                     else
                     {
                         cboKey3.Enabled = false;
-                        return;
                     }
 
-                    cboKey3.Enabled = true;
+                    
+                }
+            }
+        }
+
+        private void cboKey3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //check if UAP field should be disabled or not
+
+            if (relationName != "Scores") return;
+
+            using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
+            {
+                conn.Open();
+
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = conn;
+                    command.CommandText = "SELECT PracticumCredit FROM Courses WHERE CourseCode = @1";
+                    command.Parameters.Add(new SqlParameter("1", cboKey3.Text.Substring(0, 8)));
+
+                    short prkCredit = (short)command.ExecuteScalar();
+
+                    if (prkCredit > 0)
+                    {
+                        ShouldInsertUAPScore = true;
+                        txtField5.Enabled = true;
+                    }
+                    else
+                    {
+                        ShouldInsertUAPScore = false;
+                        txtField5.Enabled = false;
+                        txtField5.Clear();
+                    }
                 }
             }
         }

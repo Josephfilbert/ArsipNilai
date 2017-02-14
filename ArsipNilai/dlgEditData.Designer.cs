@@ -230,6 +230,7 @@
             this.cboKey3.Name = "cboKey3";
             this.cboKey3.Size = new System.Drawing.Size(317, 21);
             this.cboKey3.TabIndex = 19;
+            this.cboKey3.SelectedIndexChanged += new System.EventHandler(this.cboKey3_SelectedIndexChanged);
             // 
             // dlgEditData
             // 

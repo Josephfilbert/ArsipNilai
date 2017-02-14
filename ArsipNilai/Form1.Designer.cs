@@ -33,6 +33,7 @@
             this.btnShowAllData = new System.Windows.Forms.Button();
             this.btnTambahDataNilai = new System.Windows.Forms.TabPage();
             this.grpDataNilai = new System.Windows.Forms.GroupBox();
+            this.btnTambahNilai = new System.Windows.Forms.Button();
             this.btnTampilDataNilai = new System.Windows.Forms.Button();
             this.grpDataMataKuliah = new System.Windows.Forms.GroupBox();
             this.btnTambahMataKuliah = new System.Windows.Forms.Button();
@@ -48,7 +49,6 @@
             this.grpMahasiswa = new System.Windows.Forms.GroupBox();
             this.btnTambahMahasiswa = new System.Windows.Forms.Button();
             this.btnTampilMahasiswa = new System.Windows.Forms.Button();
-            this.btnTambahNilai = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabQuery.SuspendLayout();
             this.btnTambahDataNilai.SuspendLayout();
@@ -124,15 +124,27 @@
             this.grpDataNilai.TabStop = false;
             this.grpDataNilai.Text = "Data Nilai";
             // 
+            // btnTambahNilai
+            // 
+            this.btnTambahNilai.Location = new System.Drawing.Point(11, 67);
+            this.btnTambahNilai.Name = "btnTambahNilai";
+            this.btnTambahNilai.Size = new System.Drawing.Size(106, 33);
+            this.btnTambahNilai.TabIndex = 2;
+            this.btnTambahNilai.Tag = "Scores";
+            this.btnTambahNilai.Text = "Tambah";
+            this.btnTambahNilai.UseVisualStyleBackColor = true;
+            this.btnTambahNilai.Click += new System.EventHandler(this.tombol_tambah_Click);
+            // 
             // btnTampilDataNilai
             // 
             this.btnTampilDataNilai.Location = new System.Drawing.Point(11, 28);
             this.btnTampilDataNilai.Name = "btnTampilDataNilai";
             this.btnTampilDataNilai.Size = new System.Drawing.Size(106, 33);
             this.btnTampilDataNilai.TabIndex = 0;
+            this.btnTampilDataNilai.Tag = "Scores";
             this.btnTampilDataNilai.Text = "Tampilkan";
             this.btnTampilDataNilai.UseVisualStyleBackColor = true;
-            this.btnTampilDataNilai.Click += new System.EventHandler(this.btnTampilDataNilai_Click);
+            this.btnTampilDataNilai.Click += new System.EventHandler(this.show_relation_button);
             // 
             // grpDataMataKuliah
             // 
@@ -151,6 +163,7 @@
             this.btnTambahMataKuliah.Name = "btnTambahMataKuliah";
             this.btnTambahMataKuliah.Size = new System.Drawing.Size(106, 33);
             this.btnTambahMataKuliah.TabIndex = 2;
+            this.btnTambahMataKuliah.Tag = "Courses";
             this.btnTambahMataKuliah.Text = "Tambah";
             this.btnTambahMataKuliah.UseVisualStyleBackColor = true;
             this.btnTambahMataKuliah.Click += new System.EventHandler(this.tombol_tambah_Click);
@@ -161,9 +174,10 @@
             this.btnTampilDataMataKuliah.Name = "btnTampilDataMataKuliah";
             this.btnTampilDataMataKuliah.Size = new System.Drawing.Size(106, 33);
             this.btnTampilDataMataKuliah.TabIndex = 0;
+            this.btnTampilDataMataKuliah.Tag = "Courses";
             this.btnTampilDataMataKuliah.Text = "Tampilkan";
             this.btnTampilDataMataKuliah.UseVisualStyleBackColor = true;
-            this.btnTampilDataMataKuliah.Click += new System.EventHandler(this.btnTampilDataMataKuliah_Click);
+            this.btnTampilDataMataKuliah.Click += new System.EventHandler(this.show_relation_button);
             // 
             // grpDataSemester
             // 
@@ -182,6 +196,7 @@
             this.btnTambahSemester.Name = "btnTambahSemester";
             this.btnTambahSemester.Size = new System.Drawing.Size(106, 33);
             this.btnTambahSemester.TabIndex = 2;
+            this.btnTambahSemester.Tag = "SemesterData";
             this.btnTambahSemester.Text = "Tambah";
             this.btnTambahSemester.UseVisualStyleBackColor = true;
             this.btnTambahSemester.Click += new System.EventHandler(this.tombol_tambah_Click);
@@ -192,9 +207,10 @@
             this.btnTampilDataSemester.Name = "btnTampilDataSemester";
             this.btnTampilDataSemester.Size = new System.Drawing.Size(106, 33);
             this.btnTampilDataSemester.TabIndex = 0;
+            this.btnTampilDataSemester.Tag = "SemesterData";
             this.btnTampilDataSemester.Text = "Tampilkan";
             this.btnTampilDataSemester.UseVisualStyleBackColor = true;
-            this.btnTampilDataSemester.Click += new System.EventHandler(this.btnTampilDataSemester_Click);
+            this.btnTampilDataSemester.Click += new System.EventHandler(this.show_relation_button);
             // 
             // statusStrip1
             // 
@@ -261,6 +277,7 @@
             this.btnTambahMahasiswa.Name = "btnTambahMahasiswa";
             this.btnTambahMahasiswa.Size = new System.Drawing.Size(106, 33);
             this.btnTambahMahasiswa.TabIndex = 1;
+            this.btnTambahMahasiswa.Tag = "Student";
             this.btnTambahMahasiswa.Text = "Tambah";
             this.btnTambahMahasiswa.UseVisualStyleBackColor = true;
             this.btnTambahMahasiswa.Click += new System.EventHandler(this.tombol_tambah_Click);
@@ -271,19 +288,10 @@
             this.btnTampilMahasiswa.Name = "btnTampilMahasiswa";
             this.btnTampilMahasiswa.Size = new System.Drawing.Size(106, 33);
             this.btnTampilMahasiswa.TabIndex = 0;
+            this.btnTampilMahasiswa.Tag = "Student";
             this.btnTampilMahasiswa.Text = "Tampilkan";
             this.btnTampilMahasiswa.UseVisualStyleBackColor = true;
-            this.btnTampilMahasiswa.Click += new System.EventHandler(this.btnTampilMahasiswa_Click);
-            // 
-            // btnTambahNilai
-            // 
-            this.btnTambahNilai.Location = new System.Drawing.Point(11, 67);
-            this.btnTambahNilai.Name = "btnTambahNilai";
-            this.btnTambahNilai.Size = new System.Drawing.Size(106, 33);
-            this.btnTambahNilai.TabIndex = 2;
-            this.btnTambahNilai.Text = "Tambah";
-            this.btnTambahNilai.UseVisualStyleBackColor = true;
-            this.btnTambahNilai.Click += new System.EventHandler(this.tombol_tambah_Click);
+            this.btnTampilMahasiswa.Click += new System.EventHandler(this.show_relation_button);
             // 
             // frmMain
             // 
