@@ -219,7 +219,6 @@
             this.cboKey2.Name = "cboKey2";
             this.cboKey2.Size = new System.Drawing.Size(317, 21);
             this.cboKey2.TabIndex = 18;
-            this.cboKey2.SelectedIndexChanged += new System.EventHandler(this.cboKey2_SelectedIndexChanged);
             // 
             // cboKey3
             // 

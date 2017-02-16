@@ -142,14 +142,43 @@ namespace ArsipNilai
 
             else if(relationName == "Scores")
             {
+
+                //the keys must not be empty
+                if(cboKey1.Text == string.Empty || cboKey2.Text == string.Empty || cboKey3.Text == string.Empty)
+                {
+                    CommonFunctions.InvokeErrorMsg("The keys should not be empty!", Application.ProductName);
+                    return;
+                }
+
                 //check the textboxes, it should be numeric and in 0..100 range
                 foreach(System.Windows.Forms.Control txtBoxes in this.Controls)
                 {
                     //only text box should be checked
                     if(txtBoxes.GetType() == typeof(TextBox))
                     {
-                        //check the UAP field, if practicum credit is zero then no need to check
 
+                        //do not check the class field, it will be handled by table constraint, just check if empty or not
+                        if (txtBoxes.Name == "txtField1")
+                        {
+                            if (String.IsNullOrWhiteSpace(txtBoxes.Text))
+                            {
+                                CommonFunctions.InvokeErrorMsg("The class field should not be zero", Application.ProductName);
+                                return;
+                            }
+                            else
+                                continue;
+                        }
+
+                        //check the UAP field, if practicum credit is zero then no need to check
+                        if (txtBoxes.Name == "txtField5" && !ShouldInsertUAPScore) continue;
+
+                        //check, it should be numeric
+                        short score;
+                        if (!short.TryParse(txtBoxes.Text, out score) || score < 0 || score > 100)
+                        {
+                            CommonFunctions.InvokeErrorMsg("Invalid scores!\nIt should be numeric and between 0..100", Application.ProductName);
+                            return;
+                        }
                     }
                 }
             }
@@ -309,6 +338,55 @@ namespace ArsipNilai
                                 }
 
                             }
+
+                            else if(relationName == "Scores")
+                            {
+                                command.CommandText = ShouldInsertUAPScore ? 
+                                    "INSERT INTO Scores (NIM, Semester, CourseCode, Class, TM, UTS, UAS, UAP) VALUES (@1, @2, @3, @4, @5, @6, @7, @8)"
+                                    :
+                                    "INSERT INTO Scores (NIM, Semester, CourseCode, Class, TM, UTS, UAS) VALUES (@1, @2, @3, @4, @5, @6, @7)";
+
+                                command.Parameters.Add(new SqlParameter("1", cboKey1.Text.Substring(0, 10)));
+                                command.Parameters.Add(new SqlParameter("2", cboKey2.Text));
+                                command.Parameters.Add(new SqlParameter("3", cboKey3.Text.Substring(0, 8)));
+                                command.Parameters.Add(new SqlParameter("4", txtField1.Text));
+                                command.Parameters.Add(new SqlParameter("5", short.Parse(txtField2.Text)));
+                                command.Parameters.Add(new SqlParameter("6", short.Parse(txtField3.Text)));
+                                command.Parameters.Add(new SqlParameter("7", short.Parse(txtField4.Text)));
+                                if(ShouldInsertUAPScore) command.Parameters.Add(new SqlParameter("8", short.Parse(txtField5.Text)));
+
+                                try
+                                {
+                                    if(command.ExecuteNonQuery() > 0)
+                                    {
+                                        MessageBox.Show("Insert successful!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        this.DialogResult = DialogResult.OK;
+                                        this.Close();
+                                    }
+                                }
+                                catch (SqlException sqlEx)
+                                {
+                                    if(sqlEx.Number == 2627)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The specified student, semester and course already exists!", Application.ProductName);
+                                    }
+                                    else if(sqlEx.Number == 547 || sqlEx.Number == 8152)
+                                    {
+                                        CommonFunctions.InvokeErrorMsg("The class code should be AA00 format", Application.ProductName);
+                                    }
+                                    else
+                                    {
+                                        CommonFunctions.InvokeErrorMsg(String.Format(
+                                                "SQL Error Code : {0}\n" +
+                                                "SQL Error Number : {1}\n" +
+                                                "SQL Message :\n{2}",
+                                                    sqlEx.ErrorCode, sqlEx.Number, sqlEx.Message
+                                                )
+                                                , Application.ProductName);
+                                    }
+                                }
+
+                            }
                         }
 
 
@@ -337,9 +415,8 @@ namespace ArsipNilai
         {
             if (relationName != "Scores") return;
 
-            //clear the combo box 2 and 3
+            //clear the combo box 2
             cboKey2.Items.Clear();
-            cboKey3.Items.Clear();
 
             //get available semesters, apply the change to cboKey2 (semester select)
             using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
@@ -371,7 +448,7 @@ namespace ArsipNilai
                     else
                     {
                         //if there's no semester data for this student, cancel reading and disable the controls
-                        cboKey2.Enabled = cboKey3.Enabled = false;
+                        cboKey2.Enabled = false;
                     }
 
                     
@@ -379,7 +456,7 @@ namespace ArsipNilai
             }
         }
 
-        private void cboKey2_SelectedIndexChanged(object sender, EventArgs e)
+        /*private void cboKey2_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (relationName != "Scores") return;
 
@@ -419,7 +496,7 @@ namespace ArsipNilai
                     
                 }
             }
-        }
+        }*/
 
         private void cboKey3_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -430,6 +507,9 @@ namespace ArsipNilai
             using (SqlConnection conn = new SqlConnection(frmMain.connectionString))
             {
                 conn.Open();
+
+                
+
 
                 using (SqlCommand command = new SqlCommand())
                 {
@@ -613,13 +693,34 @@ namespace ArsipNilai
                                     else
                                     {
                                         MessageBox.Show("No Students available", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                        return;
+                                        this.Close();
                                     }
                                 }
                             }
 
-                            //disable 2 combo boxes because combo box 1 currently selected to nothing
-                            cboKey2.Enabled = cboKey3.Enabled = false;
+                            //disable combo box 2 because combo box 1 currently selected to nothing
+                            cboKey2.Enabled = false;
+
+                            //read available courses
+                            using (SqlCommand command = new SqlCommand("SELECT CourseCode, CourseName FROM Courses", conn))
+                            {
+                                SqlDataReader reader = command.ExecuteReader();
+
+                                if (reader.Read())
+                                {
+                                    cboKey3.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+
+                                    while (reader.Read())
+                                        cboKey3.Items.Add(reader.GetString(0) + " - " + reader.GetString(1));
+
+                                }
+                                else
+                                {
+                                    //no courses available, cancel insertion
+                                    MessageBox.Show("No courses available!", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    this.Close();
+                                }
+                            }
                         }
                     }
 
